@@ -1,3 +1,3 @@
-Flutter Application
-Domain - Productivity
+Flutter Application,
+Domain - Productivity,
 Application name - Student Planner
