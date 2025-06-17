@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'mood_question.dart';
+import 'mood_questions.dart';
 import 'mood_result_page.dart';
 
 class MoodQuizPage extends StatefulWidget {
@@ -18,7 +18,7 @@ class _MoodQuizPageState extends State<MoodQuizPage> {
         currentQuestion++;
       } else {
         int totalScore = answers.reduce((a, b) => a + b);
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (_) => MoodResultPage(score: totalScore),
@@ -31,22 +31,42 @@ class _MoodQuizPageState extends State<MoodQuizPage> {
   @override
   Widget build(BuildContext context) {
     final question = moodQuestions[currentQuestion];
+
     return Scaffold(
-      appBar: AppBar(title: Text('Mood Tracker')),
+      appBar: AppBar(
+        title: Text('Mood Tracker'),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${currentQuestion + 1}. ${question['question']}',
-              style: TextStyle(fontSize: 20),
+              'Question ${currentQuestion + 1} of ${moodQuestions.length}',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
-            ...question['options'].map<Widget>((option) {
-              return ElevatedButton(
-                onPressed: () => _nextQuestion(option),
-                child: Text('$option'),
+            SizedBox(height: 20),
+            Text(
+              question['question'],
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 30),
+            ...List.generate(question['options'].length, (index) {
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 6),
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  onPressed: () => _nextQuestion(question['scores'][index]),
+                  child: Text(
+                    question['options'][index],
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
